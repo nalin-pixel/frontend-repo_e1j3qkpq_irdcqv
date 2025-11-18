@@ -1,40 +1,55 @@
 import Spline from '@splinetool/react-spline'
+import { motion } from 'framer-motion'
 
 export default function Hero() {
   return (
-    <section id="home" className="relative h-[80vh] min-h-[560px] w-full overflow-hidden">
+    <section id="home" className="relative h-[90vh] min-h-[620px] w-full overflow-hidden">
       {/* Spline 3D cover */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 opacity-80">
         <Spline scene="https://prod.spline.design/zhZFnwyOYLgqlLWk/scene.splinecode" style={{ width: '100%', height: '100%' }} />
       </div>
 
-      {/* Soft gradient overlay for readability, doesn't block interaction */}
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-white/70 via-white/40 to-white"></div>
+      {/* Pixelated vignette */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background: 'radial-gradient(closest-side, rgba(0,0,0,0) 60%, rgba(0,0,0,0.35))',
+        imageRendering: 'pixelated'
+      }} />
 
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center">
-        <div className="max-w-2xl animate-[fadeInUp_700ms_ease_100ms_both]">
-          <p className="text-sm font-medium uppercase tracking-widest text-neutral-600">Aspiring Software Engineer</p>
-          <h1 className="mt-3 text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-neutral-900">
-            Hi, I’m <span className="underline decoration-rose-400 decoration-4 underline-offset-4">Your Name</span>.
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="max-w-2xl panel pixel-border p-6 sm:p-8"
+        >
+          <p className="text-xs sm:text-sm font-[var(--font-pixel)] uppercase tracking-widest text-teal-200">Aspiring Software Engineer</p>
+          <h1 className="mt-3 text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight">
+            Hi, I’m <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-200 via-cyan-200 to-sky-300">Your Name</span>.
           </h1>
-          <p className="mt-4 text-neutral-700 text-lg">
-            I design and build clean, accessible web experiences. I love solving real problems with code and collaborating on products that matter.
+          <p className="mt-4 text-white/80 text-base sm:text-lg">
+            I craft delightful, performant web experiences. Scroll to explore my world — beware of slimes.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <a href="#projects" className="inline-flex items-center gap-2 rounded-full bg-neutral-900 text-white px-5 py-2.5 text-sm font-medium hover:bg-neutral-800 transition-colors">
-              View Projects
-            </a>
-            <a href="#contact" className="inline-flex items-center gap-2 rounded-full border border-neutral-300 px-5 py-2.5 text-sm font-medium text-neutral-900 hover:border-neutral-400 transition-colors">
-              Get in Touch
-            </a>
+            <a href="#projects" className="pixel-button">View Projects</a>
+            <a href="#contact" className="pixel-button" style={{ background: 'linear-gradient(180deg, #9be7ff, #3aa0f7 60%, #1a66bf)', borderColor: '#3390e6' }}>Get in Touch</a>
           </div>
-        </div>
+        </motion.div>
       </div>
 
-      <style>{`
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: translateY(0);} }
-      `}</style>
+      {/* Floating pixels */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {[...Array(18)].map((_, i) => (
+          <motion.span
+            key={i}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: [0, 1, 1, 0], y: [0, -40 - (i%5)*6, -80 - (i%7)*7, -120], x: [0, (i%2?1:-1)*10, (i%3?1:-1)*20, (i%2?1:-1)*30] }}
+            transition={{ duration: 6 + (i%5), delay: i * 0.2, repeat: Infinity, repeatDelay: 4 }}
+            className="absolute w-1.5 h-1.5 bg-teal-200/80"
+            style={{ left: `${(i*7)%100}%`, bottom: `${(i*9)%60}%`, boxShadow: '0 0 6px rgba(100,255,218,0.75)' }}
+          />
+        ))}
+      </div>
     </section>
   )
 }

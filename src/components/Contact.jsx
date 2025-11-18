@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 
 export default function Contact() {
   const [status, setStatus] = useState('')
@@ -26,30 +27,31 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-24 bg-white">
+    <section id="contact" className="py-24">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-        <p className="text-sm font-medium uppercase tracking-widest text-neutral-600">Contact</p>
-        <h2 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight text-neutral-900">Let’s build something</h2>
-        <p className="mt-3 text-neutral-700">Have a project idea, internship, or collaboration in mind? Drop a message.</p>
+        <p className="text-xs font-[var(--font-pixel)] uppercase tracking-widest text-teal-200">Contact</p>
+        <h2 className="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight">Let’s build something</h2>
+        <p className="mt-3 text-white/80">Have a project idea, internship, or collaboration in mind? Drop a message.</p>
 
-        <form onSubmit={onSubmit} className="mt-8 space-y-4">
+        <motion.form onSubmit={onSubmit} className="mt-8 space-y-4 panel pixel-border p-6"
+          initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
           <div>
-            <label className="block text-sm font-medium text-neutral-800">Name</label>
-            <input name="name" required className="mt-1 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-rose-300" />
+            <label className="block text-sm font-medium">Name</label>
+            <input name="name" required className="mt-1 w-full rounded-xl bg-black/30 border border-white/15 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-300 text-white placeholder-white/50" placeholder="Terrarian" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-neutral-800">Email</label>
-            <input type="email" name="email" required className="mt-1 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-rose-300" />
+            <label className="block text-sm font-medium">Email</label>
+            <input type="email" name="email" required className="mt-1 w-full rounded-xl bg-black/30 border border-white/15 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-300 text-white placeholder-white/50" placeholder="you@domain.com" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-neutral-800">Message</label>
-            <textarea name="message" rows="4" required className="mt-1 w-full rounded-xl border border-neutral-300 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-rose-300" />
+            <label className="block text-sm font-medium">Message</label>
+            <textarea name="message" rows="4" required className="mt-1 w-full rounded-xl bg-black/30 border border-white/15 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-300 text-white placeholder-white/50" placeholder="Let\'s craft something legendary..." />
           </div>
-          <button className="inline-flex items-center gap-2 rounded-full bg-neutral-900 text-white px-5 py-2.5 text-sm font-medium hover:bg-neutral-800 transition-colors">Send</button>
-          {status && <p className="text-sm text-neutral-600">{status}</p>}
-        </form>
+          <button className="pixel-button">Send</button>
+          {status && <p className="text-sm text-white/70">{status}</p>}
+        </motion.form>
 
-        <p className="mt-8 text-sm text-neutral-500">Or email me at <span className="font-medium text-neutral-800">you@example.com</span></p>
+        <p className="mt-8 text-sm text-white/70">Or email me at <span className="font-medium text-white">you@example.com</span></p>
       </div>
     </section>
   )

@@ -2,45 +2,136 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Pixel + retro fonts */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
 @layer base {
   :root {
     --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-geist: 'Geist', system-ui, sans-serif;
-    --font-geist-mono: 'Geist Mono', monospace;
-    --font-mona: 'Mona Sans', system-ui, sans-serif;
-    --font-ibm-plex: 'IBM Plex Sans', system-ui, sans-serif;
-    --font-manrope: 'Manrope', system-ui, sans-serif;
+    --font-pixel: 'Press Start 2P', system-ui, sans-serif;
+    --font-mono: 'VT323', monospace;
+
+    --terraria-sky-top: #0b1b3a;
+    --terraria-sky-mid: #122a5c;
+    --terraria-sky-bottom: #193b78;
+    --terraria-hill-1: #0e2a52;
+    --terraria-hill-2: #0b2040;
+    --terraria-panel: rgba(16, 22, 39, 0.55);
+    --terraria-accent: #64ffda;
+    --terraria-accent-2: #9be7ff;
   }
 
   html {
     font-family: var(--font-sans);
     font-feature-settings: "rlig" 1, "calt" 1;
+    scroll-behavior: smooth;
   }
 
   body {
-    @apply antialiased;
+    @apply antialiased text-white;
+    background: linear-gradient(to bottom, var(--terraria-sky-top), var(--terraria-sky-mid) 45%, var(--terraria-sky-bottom));
+    background-attachment: fixed;
+    position: relative;
+    min-height: 100vh;
   }
 }
 
-/* Custom utility classes for shadcn/ui patterns */
+/* Terraria-esque animated sky: stars + parallax hills */
+@layer components {
+  .bg-terraria {
+    position: relative;
+    isolation: isolate;
+  }
+  .bg-terraria::before {
+    /* Stars layer */
+    content: "";
+    position: fixed;
+    inset: -200vh -200vw;
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.9) 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 70% 20%, rgba(255,255,255,0.8) 50%, transparent 51%),
+      radial-gradient(1.8px 1.8px at 40% 80%, rgba(255,255,255,0.7) 50%, transparent 51%),
+      radial-gradient(1.2px 1.2px at 85% 65%, rgba(255,255,255,0.6) 50%, transparent 51%),
+      radial-gradient(1.4px 1.4px at 10% 70%, rgba(255,255,255,0.7) 50%, transparent 51%);
+    background-repeat: repeat;
+    animation: twinkle 12s linear infinite;
+    z-index: -2;
+    pointer-events: none;
+  }
+  .bg-terraria::after {
+    /* Parallax hills */
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(120% 40% at 50% 110%, var(--terraria-hill-2) 0%, transparent 60%),
+      radial-gradient(120% 45% at 30% 115%, var(--terraria-hill-1) 0%, transparent 60%),
+      radial-gradient(120% 45% at 70% 118%, var(--terraria-hill-1) 0%, transparent 60%);
+    transform: translateZ(0);
+    filter: saturate(120%);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .panel {
+    background: var(--terraria-panel);
+    backdrop-filter: blur(6px) saturate(1.2);
+    border: 2px solid rgba(255,255,255,0.08);
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.35) inset, 0 10px 30px rgba(0,0,0,0.35);
+    border-radius: 16px;
+  }
+
+  .pixel-border {
+    position: relative;
+  }
+  .pixel-border::before {
+    content: "";
+    position: absolute; inset: 0;
+    box-shadow:
+      0 0 0 2px rgba(255,255,255,0.07) inset,
+      0 0 0 4px rgba(0,0,0,0.55) inset;
+    border-radius: 12px;
+    pointer-events: none;
+  }
+
+  .pixel-button {
+    position: relative;
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0.7rem 1.1rem;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #2df0c4, #15a38a 60%, #0b7a64);
+    color: #07231d; font-weight: 800; letter-spacing: 0.02em;
+    box-shadow: 0 3px 0 #054f40, 0 6px 12px rgba(0,0,0,0.3);
+    border: 2px solid #0d947c;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+    transition: transform 120ms ease, box-shadow 120ms ease, filter 200ms ease;
+  }
+  .pixel-button:hover { transform: translateY(-2px); filter: brightness(1.05) saturate(1.1); }
+  .pixel-button:active { transform: translateY(1px); box-shadow: 0 1px 0 #054f40, 0 4px 8px rgba(0,0,0,0.35); }
+
+  .chip {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px;
+    padding: 0.35rem 0.7rem;
+  }
+}
+
+@keyframes twinkle {
+  0% { transform: translate3d(0,0,0); opacity: 0.9; }
+  50% { opacity: 0.6; }
+  100% { transform: translate3d(2%, 0, 0); opacity: 0.9; }
+}
+
+/* Utilities for shadcn/ui patterns */
 @layer utilities {
   .animate-in {
     animation-name: animateIn;
     animation-duration: 350ms;
     --tw-enter-opacity: initial;
-    --tw-enter-scale: initial;
-    --tw-enter-rotate: initial;
-    --tw-enter-translate-x: initial;
-    --tw-enter-translate-y: initial;
   }
-
   .animate-out {
     animation-name: animateOut;
     animation-duration: 350ms;
-    --tw-exit-opacity: initial;
-    --tw-exit-scale: initial;
-    --tw-exit-rotate: initial;
-    --tw-exit-translate-x: initial;
-    --tw-exit-translate-y: initial;
   }
 }
